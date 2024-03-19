@@ -1,0 +1,16 @@
+// Analiza la respuesta
+let response = pm.response.json();
+let totalVisits = response.length;
+let failedVisits = response.filter(visit => visit.status === 'failed').length;
+let failedPercentage = (failedVisits / totalVisits) * 100;
+
+console.log(`Total de visitas: ${totalVisits}, Visitas fallidas: ${failedVisits}, Porcentaje: ${failedPercentage}%`);
+
+// Verifica si más del 50% son fallidos y establece una variable para la próxima solicitud
+if (failedPercentage > 50) {
+    pm.environment.set("sendEmail", true);
+    pm.environment.set("failedPercentage", failedPercentage); // Almacena el porcentaje para usar en el correo
+} else {
+    pm.environment.set("sendEmail", false);
+}
+
